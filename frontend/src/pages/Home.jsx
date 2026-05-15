@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../CartContext';
+import API_BASE_URL from '../config';
 import ReportModal from '../components/ReportModal';
 
 // ── Countdown Timer ───────────────────────────────────────────────────────────
@@ -115,12 +116,12 @@ export default function Home() {
   const [email, setEmail] = useState('');
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/products/featured')
+    fetch(`${API_BASE_URL}/api/products/featured`)
       .then(r => r.json())
       .then(data => { setFeaturedProducts(Array.isArray(data) ? data : []); setLoadingProducts(false); })
       .catch(() => setLoadingProducts(false));
 
-    fetch('http://localhost:5000/api/sellers')
+    fetch(`${API_BASE_URL}/api/sellers`)
       .then(r => r.json())
       .then(data => { setSellers(Array.isArray(data) ? data : []); setLoadingSellers(false); })
       .catch(() => setLoadingSellers(false));

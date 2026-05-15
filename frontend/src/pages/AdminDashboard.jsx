@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import API_BASE_URL from '../config';
 import { useAuth } from '../AuthContext';
 import '../admin.css';
 
@@ -22,21 +23,21 @@ export default function AdminDashboard() {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const statsRes = await fetch('http://localhost:5000/api/admin/stats');
+      const statsRes = await fetch(`${API_BASE_URL}/api/admin/stats`);
       const statsData = await statsRes.json();
       setStats(statsData);
 
       if (activeTab === 'User Management') {
-        const usersRes = await fetch('http://localhost:5000/api/admin/users');
+        const usersRes = await fetch(`${API_BASE_URL}/api/admin/users`);
         setUsers(await usersRes.json());
       } else if (activeTab === 'Vendor Approval') {
-        const vendorsRes = await fetch('http://localhost:5000/api/admin/vendors');
+        const vendorsRes = await fetch(`${API_BASE_URL}/api/admin/vendors`);
         setVendors(await vendorsRes.json());
       } else if (activeTab === 'Product Moderation') {
-        const productsRes = await fetch('http://localhost:5000/api/admin/products/flagged');
+        const productsRes = await fetch(`${API_BASE_URL}/api/admin/products/flagged`);
         setFlaggedProducts(await productsRes.json());
       } else if (activeTab === 'Reports') {
-        const reportsRes = await fetch('http://localhost:5000/api/admin/reports');
+        const reportsRes = await fetch(`${API_BASE_URL}/api/admin/reports`);
         setReports(await reportsRes.json());
       }
     } catch (error) {
@@ -49,7 +50,7 @@ export default function AdminDashboard() {
   const handleUserStatus = async (userId, currentStatus) => {
     const newStatus = currentStatus === 'Active' ? 'Suspended' : 'Active';
     try {
-      const res = await fetch(`http://localhost:5000/api/admin/users/${userId}/status`, {
+      const res = await fetch(`${API_BASE_URL}/api/admin/users/${userId}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus })
@@ -62,7 +63,7 @@ export default function AdminDashboard() {
 
   const handleVendorStatus = async (vendorId, status) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/admin/vendors/${vendorId}/status`, {
+      const res = await fetch(`${API_BASE_URL}/api/admin/vendors/${vendorId}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status })
@@ -77,7 +78,7 @@ export default function AdminDashboard() {
     if (action === 'takedown') {
       if (!confirm('Are you sure you want to PERMANENTLY DELETE this product?')) return;
       try {
-        const res = await fetch(`http://localhost:5000/api/admin/products/${productId}`, { method: 'DELETE' });
+        const res = await fetch(`${API_BASE_URL}/api/admin/products/${productId}`, { method: 'DELETE' });
         if (res.ok) {
           alert('Product deleted successfully');
           fetchData();
@@ -95,13 +96,13 @@ export default function AdminDashboard() {
     if (action === 'delete') {
       await handleProductModerate(productId, 'takedown');
       // Update report status to Resolved
-      await fetch(`http://localhost:5000/api/admin/reports/${reportId}/status`, {
+      await fetch(`${API_BASE_URL}/api/admin/reports/${reportId}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: 'Resolved' })
       });
     } else {
-      await fetch(`http://localhost:5000/api/admin/reports/${reportId}/status`, {
+      await fetch(`${API_BASE_URL}/api/admin/reports/${reportId}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: 'Dismissed' })

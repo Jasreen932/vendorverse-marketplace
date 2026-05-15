@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
+import API_BASE_URL from '../config';
 
 const INPUT = { width: '100%', padding: '11px 14px', borderRadius: 10, border: '1px solid #CBD5E1', fontSize: '0.9375rem', outline: 'none', fontFamily: 'inherit' };
 const CARD = { background: '#fff', borderRadius: 16, border: '1px solid #E2E8F0', padding: 32, boxShadow: '0 1px 3px rgba(0,0,0,0.02)' };
@@ -26,7 +27,7 @@ export default function Profile() {
 
   useEffect(() => {
     if (user?.email) {
-      fetch(`http://localhost:5000/api/profile?email=${encodeURIComponent(user.email)}&name=${encodeURIComponent(user.name || '')}`)
+      fetch(`${API_BASE_URL}/api/profile?email=${encodeURIComponent(user.email)}&name=${encodeURIComponent(user.name || '')}`)
         .then(res => res.json())
         .then(data => {
           if (data.user) {
@@ -50,7 +51,7 @@ export default function Profile() {
     if (!newAddr.name || !newAddr.street || !newAddr.city) return alert('Please fill all required fields.');
     const addressToSave = { ...newAddr, isDefault: addressList.length === 0 };
     
-    fetch('http://localhost:5000/api/profile/address', {
+    fetch(`${API_BASE_URL}/api/profile/address`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: user.email, address: addressToSave })

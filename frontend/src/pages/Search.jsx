@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useCart } from '../CartContext';
+import API_BASE_URL from '../config';
 import ReportModal from '../components/ReportModal';
 
 const CATEGORIES = ['Electronics', 'Smart Home', 'Computers', 'Fashion', 'Beauty', 'Footwear', 'Office'];
@@ -34,7 +35,7 @@ export default function SearchPage() {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`http://localhost:5000/api/products${queryParam ? `?q=${encodeURIComponent(queryParam)}` : ''}`)
+    fetch(`${API_BASE_URL}/api/products${queryParam ? `?q=${encodeURIComponent(queryParam)}` : ''}`)
       .then(r => r.json())
       .then(data => { setAllProducts(Array.isArray(data) ? data : []); setLoading(false); })
       .catch(() => setLoading(false));

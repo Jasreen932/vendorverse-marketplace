@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import API_BASE_URL from '../config';
 import { useAuth } from '../AuthContext';
 import './seller.css';
 
@@ -27,7 +28,7 @@ export default function Dashboard() {
 
   const fetchProfile = () => {
     if (!user?.email) return setLoading(false);
-    fetch(`http://localhost:5000/api/profile?email=${encodeURIComponent(user.email)}`)
+    fetch(`${API_BASE_URL}/api/profile?email=${encodeURIComponent(user.email)}`)
       .then(res => res.json())
       .then(data => {
         if (data.user) {
@@ -59,7 +60,7 @@ export default function Dashboard() {
     const amount = prompt(`Available balance: ₹${profile.financial.availableBalance.toLocaleString('en-IN')}\nEnter amount to withdraw:`);
     if (!amount) return;
     try {
-      const res = await fetch('http://localhost:5000/api/seller/payout/request', {
+      const res = await fetch(`${API_BASE_URL}/api/seller/payout/request`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: user.email, amount })
@@ -74,7 +75,7 @@ export default function Dashboard() {
 
   const markRead = async (alertId = null, markAll = false) => {
     try {
-      await fetch('http://localhost:5000/api/seller/notifications/read', {
+      await fetch(`${API_BASE_URL}/api/seller/notifications/read`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: user.email, alertId, markAll })
@@ -99,7 +100,7 @@ export default function Dashboard() {
   const handleSave = async () => {
     setSaving(true);
     try {
-      const res = await fetch('http://localhost:5000/api/seller/profile', {
+      const res = await fetch(`${API_BASE_URL}/api/seller/profile`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: user.email, ...profile })
@@ -117,7 +118,7 @@ export default function Dashboard() {
     e.preventDefault();
     setSaving(true);
     try {
-      const res = await fetch('http://localhost:5000/api/products', {
+      const res = await fetch(`${API_BASE_URL}/api/products`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...newProduct, vendor: profile.storeName || user.name })

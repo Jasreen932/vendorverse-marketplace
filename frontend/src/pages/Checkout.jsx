@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import API_BASE_URL from '../config';
 import { useCart } from '../CartContext';
 
 export default function Checkout() {
@@ -40,7 +41,7 @@ export default function Checkout() {
 
     try {
       // 1. Create Razorpay Order on Backend
-      const res = await fetch('http://localhost:5000/api/payments/order', {
+      const res = await fetch(`${API_BASE_URL}/api/payments/order`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ amount: total, currency: 'INR' })
@@ -59,7 +60,7 @@ export default function Checkout() {
         order_id: order.id,
         handler: async function (response) {
           // 3. Verify Payment on Backend
-          const verifyRes = await fetch('http://localhost:5000/api/payments/verify', {
+          const verifyRes = await fetch(`${API_BASE_URL}/api/payments/verify`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(response)

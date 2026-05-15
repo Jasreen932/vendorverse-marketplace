@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useCart } from '../CartContext';
+import { useAuth } from '../AuthContext';
+import API_BASE_URL from '../config';
 import ReportModal from '../components/ReportModal';
 
 function ProductDetails() {
@@ -13,7 +15,7 @@ function ProductDetails() {
   const { addToCart } = useCart();
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/products/${id}`)
+    fetch(`${API_BASE_URL}/api/products/${id}`)
       .then(res => res.json())
       .then(data => {
         setProduct(data);
@@ -142,7 +144,7 @@ function ProductDetails() {
                 if (!localStorage.getItem('vv_user')) return alert("Please login to save products!");
                 const user = JSON.parse(localStorage.getItem('vv_user'));
                 try {
-                  const res = await fetch('http://localhost:5000/api/profile/save-product', {
+                  const res = await fetch(`${API_BASE_URL}/api/profile/save-product`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email: user.email, productId: product._id })

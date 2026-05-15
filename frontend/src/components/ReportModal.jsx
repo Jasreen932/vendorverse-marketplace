@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import API_BASE_URL from '../config';
 
 export default function ReportModal({ product, onClose }) {
   const [reason, setReason] = useState('Suspicious Price');
@@ -11,7 +12,7 @@ export default function ReportModal({ product, onClose }) {
     setLoading(true);
     try {
       const user = JSON.parse(localStorage.getItem('vv_user') || '{}');
-      const res = await fetch(`http://localhost:5000/api/products/${product._id}/report`, {
+      const res = await fetch(`${API_BASE_URL}/api/products/${product._id}/report`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
