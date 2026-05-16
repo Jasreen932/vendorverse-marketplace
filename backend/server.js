@@ -15,7 +15,34 @@ const Report = require('./models/Report');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+// ─── Environment Validation ──────────────────────────────────────────────────
+const REQUIRED_ENV = ['MONGODB_URI'];
+const missingEnv = REQUIRED_ENV.filter(key => !process.env[key]);
+if (missingEnv.length > 0 && process.env.NODE_ENV === 'production') {
+  console.error(`✗ CRITICAL ERROR: Missing environment variables: ${missingEnv.join(', ')}`);
+  process.exit(1);
+}
+
+// ─── CORS Configuration ──────────────────────────────────────────────────────
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:3000',
+  process.env.FRONTEND_URL
+].filter(Boolean);
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps or curl)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV !== 'production') {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+}));
+
 app.use(express.json());
 
 // ─── DB Connection & Mocking ──────────────────────────────────────────────────
@@ -49,9 +76,11 @@ const connectDB = async () => {
       console.log('✓ Connected to In-Memory MongoDB');
     } else {
       console.log('Attempting to connect to MongoDB Atlas...');
+      if (!process.env.MONGODB_URI) {
+        throw new Error('MONGODB_URI is not defined in environment variables');
+      }
       await mongoose.connect(process.env.MONGODB_URI, { 
-        serverSelectionTimeoutMS: 5000,
-        family: 4, // Force IPv4 to bypass DNS SRV issues
+        serverSelectionTimeoutMS: 10000, // Increased timeout
       });
       console.log('✓ Connected to MongoDB Atlas');
 
@@ -599,6 +628,14 @@ app.post('/api/chat', (req, res) => {
   else if (msg.includes('return')) reply = "30-day return policy. Visit your profile.";
   else if (msg.includes('hello') || msg.includes('hi')) reply = "Welcome to VendorVerse! How can I help?";
   setTimeout(() => res.json({ reply }), 600);
+});
+
+// ─── Global Error Handler ────────────────────────────────────────────────────
+app.use((err, req, res, next) => {
+  console.error('✗ Server Error:', err.stack);
+  res.status(err.status || 500).json({
+    error: process.env.NODE_ENV === 'production' ? 'Internal Server Error' : err.message
+  });
 });
 
 app.get('/', (req, res) => res.send('VendorVerse API is running ✓'));

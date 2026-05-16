@@ -15,6 +15,13 @@ export default function AdminDashboard() {
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [notifications, setNotifications] = useState([
+    { id: 1, text: 'EcoCraft Ceramics joined as a vendor', time: '2 hours ago', icon: '👤', color: '#10B981', read: false },
+    { id: 2, text: 'Wireless Earbuds X1 reported for counterfeit', time: '5 hours ago', icon: '⚠️', color: '#EF4444', read: false },
+    { id: 3, text: 'Bulk order #9283 confirmed by Urban Retailers', time: '8 hours ago', icon: '🛒', color: '#3B82F6', read: true },
+    { id: 4, text: 'Minimalist Threads approved as Premium Vendor', time: 'Yesterday', icon: '✨', color: '#8B5CF6', read: true }
+  ]);
 
   useEffect(() => {
     fetchData();
@@ -354,6 +361,7 @@ export default function AdminDashboard() {
     { name: 'Vendor Approval', icon: '🛡️' },
     { name: 'Product Moderation', icon: '📦' },
     { name: 'Reports', icon: '📈' },
+    { name: 'Audit Logs', icon: '📋' },
     { name: 'Settings', icon: '⚙️' }
   ];
 
@@ -393,10 +401,43 @@ export default function AdminDashboard() {
           </div>
 
           <div className="admin-topbar-right">
-             <button style={{ background: 'transparent', border: 'none', cursor: 'pointer', position: 'relative' }}>
-               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-               <span style={{ position: 'absolute', top: -2, right: -2, width: 8, height: 8, background: '#EF4444', borderRadius: '50%' }}></span>
-             </button>
+             <div style={{ position: 'relative' }}>
+               <button 
+                 style={{ background: 'transparent', border: 'none', cursor: 'pointer', position: 'relative', display: 'flex', alignItems: 'center' }}
+                 onClick={() => setNotificationsOpen(!notificationsOpen)}
+               >
+                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                 {notifications.filter(n => !n.read).length > 0 && (
+                   <span style={{ position: 'absolute', top: -2, right: -2, width: 8, height: 8, background: '#EF4444', borderRadius: '50%' }}></span>
+                 )}
+               </button>
+
+               {notificationsOpen && (
+                 <>
+                   <div style={{ position: 'fixed', inset: 0, zIndex: 10 }} onClick={() => setNotificationsOpen(false)} />
+                   <div className="admin-notifications-dropdown">
+                     <div className="admin-notifications-header">
+                       <h3>Notifications</h3>
+                       <button onClick={() => setNotifications(prev => prev.map(n => ({ ...n, read: true })))}>Mark all as read</button>
+                     </div>
+                     <div className="admin-notifications-list">
+                       {notifications.map(n => (
+                         <div key={n.id} className={`admin-notification-item ${n.read ? 'read' : ''}`}>
+                           <div className="admin-notification-icon" style={{ background: n.color + '20', color: n.color }}>{n.icon}</div>
+                           <div className="admin-notification-body">
+                             <div className="admin-notification-text">{n.text}</div>
+                             <div className="admin-notification-time">{n.time}</div>
+                           </div>
+                         </div>
+                       ))}
+                     </div>
+                     <div className="admin-notifications-footer">
+                       <button onClick={() => { setActiveTab('Audit Logs'); setNotificationsOpen(false); }}>View all activity</button>
+                     </div>
+                   </div>
+                 </>
+               )}
+             </div>
              <div className="admin-user-profile">
                 <div style={{ textAlign: 'right' }}>
                   <div style={{ fontSize: '0.85rem', fontWeight: 700 }}>{user?.name || 'Jasreen Kaur'}</div>
@@ -418,6 +459,45 @@ export default function AdminDashboard() {
             {activeTab === 'Vendor Approval' && renderVendorApproval()}
             {activeTab === 'Product Moderation' && renderProductModeration()}
             {activeTab === 'Reports' && renderReports()}
+            {activeTab === 'Audit Logs' && (
+              <div className="admin-content">
+                <div className="admin-page-header">
+                  <h1>Audit Logs</h1>
+                  <p>Detailed system activity and security logs.</p>
+                </div>
+                <div className="admin-table-card">
+                  <table className="admin-table">
+                    <thead>
+                      <tr>
+                        <th>Timestamp</th>
+                        <th>User</th>
+                        <th>Action</th>
+                        <th>Module</th>
+                        <th>IP Address</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {[
+                        { time: '2023-10-25 14:22', user: 'admin@vendorverse.com', action: 'Approved Vendor', module: 'Vendor Approval', ip: '192.168.1.45', status: 'Success' },
+                        { time: '2023-10-25 13:10', user: 'system', action: 'Flagged Product #882', module: 'Moderation', ip: '-', status: 'Success' },
+                        { time: '2023-10-25 11:05', user: 'seller_john', action: 'Login Attempt', module: 'Auth', ip: '203.0.113.12', status: 'Failed' },
+                        { time: '2023-10-24 23:58', user: 'jasreen@gmail.com', action: 'Deleted Report #12', module: 'Reports', ip: '1.2.3.4', status: 'Success' }
+                      ].map((log, i) => (
+                        <tr key={i}>
+                          <td>{log.time}</td>
+                          <td style={{ fontWeight: 600 }}>{log.user}</td>
+                          <td>{log.action}</td>
+                          <td>{log.module}</td>
+                          <td style={{ color: 'var(--admin-text-light)', fontFamily: 'monospace' }}>{log.ip}</td>
+                          <td><span className={`badge ${log.status === 'Success' ? 'badge-active' : 'badge-suspended'}`}>{log.status}</span></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
             {activeTab === 'Settings' && (
               <div className="admin-content">
                 <h1>{activeTab}</h1>
@@ -432,7 +512,7 @@ export default function AdminDashboard() {
             <div>
               <h3 style={{ color: '#1E293B', marginBottom: 4 }}>Need to audit recent activity?</h3>
               <p style={{ fontSize: '0.85rem', color: '#64748B' }}>Review detailed transaction logs and support ticket history for these users in the Activity Monitoring module.</p>
-              <button className="admin-btn admin-btn-primary" style={{ marginTop: 16 }}>Open Audit Logs</button>
+              <button className="admin-btn admin-btn-primary" style={{ marginTop: 16 }} onClick={() => setActiveTab('Audit Logs')}>Open Audit Logs</button>
             </div>
             <div style={{ width: 100, height: 100, background: 'rgba(255,255,255,0.5)', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '3rem' }}>🛡️</div>
           </div>

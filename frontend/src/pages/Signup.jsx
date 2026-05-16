@@ -10,13 +10,39 @@ export default function Signup() {
   const [otp, setOtp] = useState('');
   const [otpSent, setOtpSent] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [showTerms, setShowTerms] = useState(false);
+  const [showPrivacy, setShowPrivacy] = useState(false);
   const navigate = useNavigate();
   const { sendOTP, verifyOTP } = useAuth();
+
+  const privacyText = `
+    Your privacy is important to us.
+    1. Data Collection: We collect your name, email, and password to provide account access.
+    2. Usage: Your information is used for authentication, order processing, and seller metrics.
+    3. Security: We use modern encryption and secure SMTP for your protection.
+    4. Disclosure: We do not sell or trade your personal information to third parties.
+    5. Cookies: We use local storage to keep you logged in and maintain your shopping cart.
+  `;
+
+  const termsText = `
+    Welcome to VendorVerse! By using our platform, you agree to:
+    1. Accuracy: You must provide truthful and accurate registration details.
+    2. Prohibited Items: You will not list or sell illegal, stolen, or counterfeit goods.
+    3. Payments: Buyers agree to pay for orders in full. Sellers agree to platform commission fees.
+    4. Conduct: Harassment or fraudulent behavior towards other users is strictly prohibited.
+    5. Privacy: Your data will be managed as per our Privacy Policy to ensure security.
+    6. Termination: We reserve the right to suspend any account violating these terms.
+  `;
 
   const handleSendOTP = async (e) => {
     e.preventDefault();
     if (!name || !email || !password) {
       alert('Please enter your name, email, and password.');
+      return;
+    }
+    if (!acceptedTerms) {
+      alert('You must accept the Terms and Conditions to proceed.');
       return;
     }
     setLoading(true);
@@ -141,10 +167,77 @@ export default function Signup() {
             </div>
           )}
 
-          <button type="submit" className="auth-submit-btn" disabled={loading}>
+          <div className="form-group checkbox-group" style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <input 
+              type="checkbox" 
+              id="terms" 
+              checked={acceptedTerms} 
+              onChange={(e) => setAcceptedTerms(e.target.checked)}
+              style={{ cursor: 'pointer' }}
+            />
+            <label htmlFor="terms" style={{ fontSize: '0.85rem', color: 'var(--text-light)', cursor: 'pointer' }}>
+              I agree to the <span style={{ color: 'var(--blue)', fontWeight: 600, textDecoration: 'underline' }} onClick={(e) => { e.preventDefault(); setShowTerms(true); }}>Terms and Conditions</span> and <span style={{ color: 'var(--blue)', fontWeight: 600, textDecoration: 'underline' }} onClick={(e) => { e.preventDefault(); setShowPrivacy(true); }}>Privacy Policy</span>
+            </label>
+          </div>
+
+          <button type="submit" className="auth-submit-btn" disabled={loading || !acceptedTerms}>
             {loading ? 'Processing...' : otpSent ? 'Verify & Create Account' : 'Send OTP to Register'}
           </button>
         </form>
+
+        {/* Terms Modal */}
+        {showTerms && (
+          <div className="modal-overlay" style={{
+            position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 1000,
+            display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px'
+          }}>
+            <div className="modal-card" style={{
+              background: 'white', padding: '32px', borderRadius: '16px', maxWidth: '500px', width: '100%',
+              boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)'
+            }}>
+              <h2 style={{ marginBottom: '16px', fontSize: '1.25rem' }}>Terms and Conditions</h2>
+              <div style={{ 
+                maxHeight: '300px', overflowY: 'auto', marginBottom: '24px', 
+                whiteSpace: 'pre-line', fontSize: '0.9rem', color: '#4B5563', lineHeight: 1.6 
+              }}>
+                {termsText}
+              </div>
+              <button 
+                className="auth-submit-btn" 
+                onClick={() => setShowTerms(false)}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Privacy Policy Modal */}
+        {showPrivacy && (
+          <div className="modal-overlay" style={{
+            position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 1000,
+            display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px'
+          }}>
+            <div className="modal-card" style={{
+              background: 'white', padding: '32px', borderRadius: '16px', maxWidth: '500px', width: '100%',
+              boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)'
+            }}>
+              <h2 style={{ marginBottom: '16px', fontSize: '1.25rem' }}>Privacy Policy</h2>
+              <div style={{ 
+                maxHeight: '300px', overflowY: 'auto', marginBottom: '24px', 
+                whiteSpace: 'pre-line', fontSize: '0.9rem', color: '#4B5563', lineHeight: 1.6 
+              }}>
+                {privacyText}
+              </div>
+              <button 
+                className="auth-submit-btn" 
+                onClick={() => setShowPrivacy(false)}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
 
         <div className="auth-divider">
           <span>OR</span>
@@ -152,11 +245,11 @@ export default function Signup() {
 
         {/* Social Login */}
         <div className="social-grid">
-          <button className="social-btn" onClick={() => alert('Signing up with Google...')}>
+          <button className="social-btn" onClick={() => alert('Social Login is Coming Soon! 🚀')}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" color="#EA4335"><path d="M12.24 10.285V13.4h6.887C18.2 15.614 15.645 18 12.24 18c-3.315 0-6-2.685-6-6s2.685-6 6-6c1.495 0 2.86.55 3.91 1.46l2.35-2.35C16.85 3.515 14.71 2.665 12.24 2.665 7.08 2.665 2.9 6.845 2.9 12s4.18 9.335 9.34 9.335c5.38 0 8.94-3.78 8.94-9.095 0-.615-.055-1.205-.16-1.955H12.24z"/></svg>
             Google
           </button>
-          <button className="social-btn" onClick={() => alert('Signing up with SSO...')}>
+          <button className="social-btn" onClick={() => alert('SSO Authentication is Coming Soon! 🔐')}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
             SSO
           </button>

@@ -117,11 +117,11 @@ export default function Login() {
         <div className="auth-divider"><span>OR CONTINUE WITH</span></div>
 
         <div className="social-grid">
-          <button className="social-btn" onClick={() => alert('Signing in with Google...')}>
+          <button className="social-btn" onClick={() => alert('Social Login is Coming Soon! 🚀')}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" color="#EA4335"><path d="M12.24 10.285V13.4h6.887C18.2 15.614 15.645 18 12.24 18c-3.315 0-6-2.685-6-6s2.685-6 6-6c1.495 0 2.86.55 3.91 1.46l2.35-2.35C16.85 3.515 14.71 2.665 12.24 2.665 7.08 2.665 2.9 6.845 2.9 12s4.18 9.335 9.34 9.335c5.38 0 8.94-3.78 8.94-9.095 0-.615-.055-1.205-.16-1.955H12.24z"/></svg>
             Google
           </button>
-          <button className="social-btn" onClick={() => alert('Signing in with SSO...')}>
+          <button className="social-btn" onClick={() => alert('SSO Authentication is Coming Soon! 🔐')}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
             SSO
           </button>
