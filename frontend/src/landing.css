@@ -127,11 +127,30 @@
 .nav-profile-trigger { transition: all .15s; }
 
 @media (max-width: 900px) {
-  .landing-hero-inner { grid-template-columns: 1fr; text-align: center; }
+  .landing-hero-inner { grid-template-columns: 1fr; text-align: center; padding: 48px 16px; }
   .landing-hero-visual { display: none; }
   .landing-headline { font-size: 2.5rem; }
   .role-cards-grid { grid-template-columns: 1fr; }
   .testimonials-grid { grid-template-columns: 1fr; }
-  .stats-bar-inner { grid-template-columns: repeat(2,1fr); }
+  .stats-bar-inner { grid-template-columns: repeat(2,1fr); gap: 24px; }
   .landing-nav-links { display: none; }
 }
+
+@media (max-width: 640px) {
+  .landing-container, .landing-nav-inner { padding: 0 16px; }
+  .landing-subline { font-size: 0.95rem; margin-bottom: 28px; }
+  .landing-hero-ctas { flex-direction: column; gap: 12px; width: 100%; align-items: stretch; }
+  .landing-cta-primary, .landing-cta-secondary { justify-content: center; width: 100%; }
+  .landing-trust-row { flex-direction: column; gap: 8px; text-align: center; }
+  .final-cta-card { padding: 48px 20px; }
+  .final-cta-title { font-size: 1.85rem; }
+  .final-cta-btns { flex-direction: column; gap: 12px; align-items: stretch; }
+  .final-cta-btns button { width: 100%; justify-content: center; }
+}
+
+@media (max-width: 480px) {
+  .landing-headline { font-size: 2rem; }
+  .stat-bar-val { font-size: 1.75rem; }
+  .role-card { padding: 24px 20px; }
+}
+

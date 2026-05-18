@@ -54,11 +54,21 @@ function Navbar() {
     navigate('/');
   };
 
-  // Role-specific dropdown items
   const roleMenuItems = () => {
     if (!user) {
       return (
         <>
+          <div className="nav-dropdown-mobile-links" style={{ display: 'none' }}>
+            <Link to="/home" className="nav-dropdown-item" onClick={() => setDropOpen(false)}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              Shop
+            </Link>
+            <Link to="/search" className="nav-dropdown-item" onClick={() => setDropOpen(false)}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83-4.24-4.24"/><path d="M9.17 14.83 4.93 19.07"/></svg>
+              Deals
+            </Link>
+            <div className="nav-dropdown-divider" />
+          </div>
           <Link to="/login" className="nav-dropdown-item" onClick={() => setDropOpen(false)}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
             Sign In
@@ -78,6 +88,17 @@ function Navbar() {
             <div className="nav-dropdown-role-badge buyer">🛍️ Buyer</div>
           </div>
           <div className="nav-dropdown-divider" />
+          <div className="nav-dropdown-mobile-links" style={{ display: 'none' }}>
+            <Link to="/home" className="nav-dropdown-item" onClick={() => setDropOpen(false)}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              Shop
+            </Link>
+            <Link to="/search" className="nav-dropdown-item" onClick={() => setDropOpen(false)}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83-4.24-4.24"/><path d="M9.17 14.83 4.93 19.07"/></svg>
+              Deals
+            </Link>
+            <div className="nav-dropdown-divider" />
+          </div>
           <Link to="/profile" className="nav-dropdown-item" onClick={() => setDropOpen(false)}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
             My Profile
@@ -126,6 +147,17 @@ function Navbar() {
             <div className="nav-dropdown-role-badge admin">⚙️ Admin</div>
           </div>
           <div className="nav-dropdown-divider" />
+          <div className="nav-dropdown-mobile-links" style={{ display: 'none' }}>
+            <Link to="/home" className="nav-dropdown-item" onClick={() => setDropOpen(false)}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              Shop
+            </Link>
+            <Link to="/search" className="nav-dropdown-item" onClick={() => setDropOpen(false)}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83-4.24-4.24"/><path d="M9.17 14.83 4.93 19.07"/></svg>
+              Deals
+            </Link>
+            <div className="nav-dropdown-divider" />
+          </div>
           <Link to="/admin" className="nav-dropdown-item" onClick={() => setDropOpen(false)}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
             Admin Panel

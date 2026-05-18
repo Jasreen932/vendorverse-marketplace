@@ -148,16 +148,15 @@ const db = {
           return newUser;
         }
       }
-      // Handle plain object vs Mongoose document
-      if (!(userObj instanceof mongoose.Model)) {
-        const existing = await User.findOne({ email: userObj.email });
-        if (existing) {
-          Object.assign(existing, userObj);
-          return existing.save();
-        }
-        return new User(userObj).save();
+      if (userObj && typeof userObj.save === 'function') {
+        return userObj.save();
       }
-      return userObj.save();
+      const existing = await User.findOne({ email: userObj.email });
+      if (existing) {
+        Object.assign(existing, userObj);
+        return existing.save();
+      }
+      return new User(userObj).save();
     },
     findById: async (id) => isMockMode ? mockData.users.find(u => u._id === id) : User.findById(id),
     find: async (query = {}) => isMockMode ? mockData.users.filter(u => Object.keys(query).every(k => u[k] === query[k])) : User.find(query)

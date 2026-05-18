@@ -434,27 +434,46 @@ body {
 
 /* ── Responsive ──────────────────────────────────────────────────────────── */
 @media (max-width: 1024px) {
-  .deals-grid { grid-template-columns: repeat(2, 1fr); }
+  .deals-grid { grid-template-columns: repeat(3, 1fr); }
   .footer-main { grid-template-columns: 1fr 1fr; gap: 32px; }
 }
 @media (max-width: 768px) {
-  .hero-inner { grid-template-columns: 1fr; }
+  .container { padding: 0 16px; }
+  .hero-inner { grid-template-columns: 1fr; gap: 24px; min-height: auto; padding: 32px 0; }
   .hero-image-wrap { display: none; }
   .hero-title { font-size: 2rem; }
   .sellers-grid { grid-template-columns: 1fr; }
-  .category-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+  .category-grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: auto; }
   .cat-card-large { grid-row: auto; }
-  .cta-banner { flex-direction: column; }
+  .cta-banner { flex-direction: column; padding: 32px 24px; text-align: center; }
   .nav-links { display: none; }
-  .nav-search { max-width: 200px; }
+  .nav-dropdown-mobile-links { display: block !important; }
 }
 @media (max-width: 640px) {
-  .deals-grid { grid-template-columns: 1fr; }
-  .category-grid { grid-template-columns: 1fr; }
+  .nav-inner { height: auto; padding: 12px 0; flex-wrap: wrap; gap: 12px; }
+  .nav-search { order: 3; max-width: 100%; width: 100%; margin-top: 4px; }
+  .nav-actions { margin-left: auto; }
+  .deals-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .deal-info { padding: 12px; }
+  .deal-title { font-size: 0.85rem; }
+  .deal-price { font-size: 1rem; }
+  .cart-btn { width: 32px; height: 32px; }
   .footer-main { grid-template-columns: 1fr; gap: 24px; }
   .cta-form { flex-direction: column; width: 100%; }
   .cta-input { width: 100%; }
 }
+@media (max-width: 480px) {
+  .deals-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .auth-card { padding: 24px 16px; }
+  .checkout-item { flex-direction: column; align-items: flex-start; gap: 12px; padding: 16px; }
+  .checkout-item-img { width: 60px; height: 60px; }
+  .checkout-item-controls { width: 100%; justify-content: space-between; }
+  .pd-guarantees { grid-template-columns: 1fr; }
+  .pd-main-img { height: 280px; }
+  .pd-thumbs { gap: 8px; }
+  .pd-thumb-wrap { height: 70px; }
+}
+
 
 /* ── Full Height Pages ────────────────────────────────────────────────────── */
 html, body, #root { height: 100%; }
